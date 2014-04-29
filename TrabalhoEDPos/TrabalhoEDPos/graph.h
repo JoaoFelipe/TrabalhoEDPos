@@ -25,7 +25,6 @@ void free_edges(TEdge *edge);
 
 void free_nodes(TNode *node);
 
-
 void print_graph(TNode *graph);
 
 TNode * insert_node(TNode *nodes, int val);
