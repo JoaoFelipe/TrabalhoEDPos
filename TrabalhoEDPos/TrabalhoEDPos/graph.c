@@ -35,7 +35,8 @@ void free_nodes(TNode *node) {
 		node = temp;
 	}
 }
-void printGraph(TNode* graph){
+
+void print_graph(TNode* graph){
 	TNode* p = graph;
 	while (p){
 		printf("%d : ", p->number);
@@ -49,38 +50,33 @@ void printGraph(TNode* graph){
 	}
 	printf("\n");
 }
-TNode* insertNode(TNode* nodes,int val){
-	if (!nodes){
-		TNode* newNode = new_node(val, NULL);
-		return newNode;
+
+TNode* insert_node(TNode *node, int number){
+	TNode* new = new_node(number, NULL);
+	if (!node) {
+		return new;
 	}
-	if (val < nodes->number){
-		TNode* newNode = new_node(val, nodes);
-		return newNode;
+	TNode *prev = NULL, *first = node;
+	while (node && (node->number < number)) {
+		prev = node;
+		node = node->next;
 	}
-	TNode *p = nodes;
-	TNode *ant = NULL;
-	while (p && p->number < val){
-		ant = p;
-		p = p->next;
+	new->next = node;
+	if ((node && (node->number != number)) || !node) {
+		if (!prev ) {
+			first = new;
+		} else  {
+			prev->next = new;
+		}
 	}
-	if (!p){
-		TNode* newNode = new_node(val, NULL);
-		ant->next = newNode;
-	}
-	else if ( p->number != val){
-		TNode* newNode = new_node(val, p);
-		ant->next = newNode;
-	}
-	return nodes;
+	return first;
 }
 
 TNode * remove_node(TNode *node, int number) {
 	if (!node) {
 		return node;
 	}
-	TNode *prev = NULL;
-	TNode *first = node;
+	TNode *prev = NULL, *first = node;
 	while (node && (node->number < number)) {
 		prev = node;
 		node = node->next;
@@ -141,4 +137,51 @@ TNode * remove_edge(TNode *node, int number1, int number2) {
 	if (!found) return node;
 	remove_edge_from_node(found, number1);
 	return node;
+}
+
+int count_edge_sequence(TEdge *edge) {
+	if (!edge) {
+		return 0;
+	}
+	return 1 + count_edge_sequence(edge->next);
+}
+
+void count_nodes_and_edges(TNode *node, int * nodes, int * edges);
+	*nodes = 0;
+	*edges = 0;
+	while (node) {
+		*nodes += 1;
+		*edges += count_edge_sequence(node->edges);
+		node = node->next;
+	}
+	*edges /= 2;
+}
+
+void save(TNode *node, char *name) {
+	int nodes, edges;
+	count_nodes_and_edges(node, nodes, edges);
+	FILE *file;
+	file = fopen(name, "w");
+	fprintf(file, "%d\n", nodes);
+	TNode *temp = node;
+	while (temp) {
+		fprintf(file, "%d\n", temp->number);
+		temp = temp->next;
+	}
+	fprintf(file, "%d\n", edges);
+	TNode *temp = node;
+	while (temp) {
+		TEdge *edge = temp->edges;
+		while (edge) {
+			if (edge->node->number > temp->number) {
+				fprintf(file, "%d %d %d\n",
+						temp->number,
+						edge->node->number,
+						edge->cost);
+			}
+			edge = edge->next;
+		}
+		temp = temp->next;
+	}
+	fclose(file);
 }

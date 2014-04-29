@@ -11,30 +11,30 @@
 int main(void)
 {
 	TNode* graph = NULL;
-//	printGraph(graph);
-	graph = insertNode(graph, 3);
-//	printGraph(graph);
+	//print_graph(graph);
+	graph = insert_node(graph, 3);
+	//print_graph(graph);
 
-	graph = insertNode(graph, 2);
-//	printGraph(graph);
-	graph = insertNode(graph, 7);
-//	printGraph(graph);
-	graph = insertNode(graph, 5);
-//	printGraph(graph);
-	graph = insertNode(graph, 5);
-//	printGraph(graph);
-	graph = insertNode(graph, 2);
-//	printGraph(graph);
-	graph = insertNode(graph, 1);
-//	printGraph(graph);
-	graph = insertNode(graph, 1);
-//	printGraph(graph);
-	graph = insertNode(graph, 1);
-//	printGraph(graph);
-	graph = insertNode(graph, 1);
-//	printGraph(graph);
-	graph = insertNode(graph, 7);
-	printGraph(graph);
+	graph = insert_node(graph, 2);
+	//print_graph(graph);
+	graph = insert_node(graph, 7);
+	//print_graph(graph);
+	graph = insert_node(graph, 5);
+	//print_graph(graph);
+	graph = insert_node(graph, 5);
+	//print_graph(graph);
+	graph = insert_node(graph, 2);
+	//print_graph(graph);
+	graph = insert_node(graph, 1);
+	//print_graph(graph);
+	graph = insert_node(graph, 1);
+	//print_graph(graph);
+	graph = insert_node(graph, 1);
+	//print_graph(graph);
+	graph = insert_node(graph, 1);
+	//print_graph(graph);
+	graph = insert_node(graph, 7);
+	print_graph(graph);
 	scanf("%d");
 	return 0;
 }
