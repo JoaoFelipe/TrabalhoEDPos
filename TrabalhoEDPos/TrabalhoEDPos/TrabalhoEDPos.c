@@ -14,7 +14,7 @@ int main(void)
 	graph = remove_node(graph,7);
 	save_file(graph, "temp2.txt");
 	print_graph(graph);
-	scanf("%d");
+	scanf_s("%d");
 	return 0;
 }
 

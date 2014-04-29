@@ -7,6 +7,7 @@ typedef struct node {
 	int number;
 	struct node *next;
 	struct edge *edges;
+	int helper;
 } TNode;
 
 typedef struct edge {
