@@ -9,42 +9,12 @@
 
 int main(void)
 {
-	TNode* graph = NULL;
-//	printGraph(graph);
-	graph = insertNode(graph, 3);
-//	printGraph(graph);
-
-	graph = insertNode(graph, 2);
-//	printGraph(graph);
-	graph = insertNode(graph, 7);
-//	printGraph(graph);
-	graph = insertNode(graph, 5);
-//	printGraph(graph);
-	graph = insertNode(graph, 5);
-//	printGraph(graph);
-	graph = insertNode(graph, 2);
-//	printGraph(graph);
-	graph = insertNode(graph, 1);
-//	printGraph(graph);
-	graph = insertNode(graph, 1);
-//	printGraph(graph);
-	graph = insertNode(graph, 1);
-//	printGraph(graph);
-	graph = insertNode(graph, 1);
-//	printGraph(graph);
-	graph = insertNode(graph, 7);
-
-	insert_edge(graph, 2, 5, 3);
-	insert_edge(graph, 2, 5, 7);
-	insert_edge(graph, 2, 7, 11);
-	insert_edge(graph, 2, 108, 0);
-
-	printGraph(graph);
+	TNode* graph = read_file("temp.txt");
+	print_graph(graph);
 	graph = remove_node(graph,7);
-
-
-	printGraph(graph);
-	scanf_s("%d");
+	save_file(graph, "temp2.txt");
+	print_graph(graph);
+	scanf("%d");
 	return 0;
 }
 
