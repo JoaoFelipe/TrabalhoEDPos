@@ -54,6 +54,8 @@ void count_nodes_and_edges(TNode *node, int * nodes, int * edges);
 
 void save_file(TNode *node, char* name);
 
+int dijkstra(TNode* nodes, int start, int end);
+
 TNode * read_file(char* name);
 
 #endif

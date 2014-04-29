@@ -190,16 +190,16 @@ int count_nodes(TNode* nodes){
 	}
 	return count;
 }
-void reset_helper(TNode *nodes){
+void reset_helper(TNode *nodes, int val){
 	TNode* p = nodes;
 	while (p){
-		p->helper = 0;
+		p->helper = val;
 		p = p->next;
 	}
 }
 
 int is_connected(TNode *nodes){
-	reset_helper(nodes);
+	reset_helper(nodes,0);
 	mark_neighbours(nodes);
 	TNode *p = nodes;
 	while (p){
@@ -208,6 +208,52 @@ int is_connected(TNode *nodes){
 		p = p->next;
 	}
 	return 1;
+}
+int dijkstra(TNode* nodes, int start, int end){
+	reset_helper(nodes, -1);
+	TNode *newGraph = NULL;
+	TNode *p = find_node(nodes, start);
+	p->helper = 0;
+	newGraph = insert_node(newGraph, p->number);
+	while (p && p->number != end){
+		TEdge* e = p->edges;
+		int not_chosen = 1;
+		TNode *least_cost = NULL;
+		int least_cost_value;
+		while (e){
+			if (e->node->helper != -2){
+				if (not_chosen == 1){
+					least_cost = e->node;
+					least_cost_value = e->cost;
+					not_chosen = 0;
+				}					
+				int val = p->helper + e->cost;								
+				if (val <= e->node->helper || e->node->helper == -1)
+					e->node->helper = val;
+				if (e->node->helper <= least_cost->helper){
+					least_cost = e->node;
+					least_cost_value = e->cost;
+				}
+					
+				
+			}	
+			e = e->next;
+		}
+		if (least_cost){
+			newGraph = insert_node(newGraph, least_cost->number);
+			insert_edge(newGraph, p->number, least_cost->number,least_cost_value);
+		}
+			
+		//printf("%d", least_cost->number);
+		p->helper = -2;
+		p = least_cost;
+	}
+	save_file(newGraph, "cmc.txt");
+	//print_graph(newGraph);
+	free_nodes(newGraph);
+	
+	
+	
 }
 void mark_neighbours(TNode *nodes){
 
