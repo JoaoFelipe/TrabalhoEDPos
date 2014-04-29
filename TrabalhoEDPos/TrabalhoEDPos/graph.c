@@ -75,3 +75,70 @@ TNode* insertNode(TNode* nodes,int val){
 	
 }
 
+TNode * remove_node(TNode *node, int number) {
+	if (!node){ 
+		return node;
+	}
+	TNode *prev = NULL;
+	TNode *first = node;
+	while (node && (node->number < number)) {
+		prev = node;
+		node = node->next;
+	}
+	if (node && (node->number == number)) {
+		if (prev) {
+			prev->next = node->next;
+		} else {
+			first = node->next;
+		}
+
+		TEdge *edge = node->edges;
+		while(edge) {
+			remove_edge_from_node(edge->node, node->number);
+		}
+		free_edges(node->edges);
+		free(node);
+	}
+	return first;
+}
+
+TNode * remove_edge_from_node(TNode *node, int number) {
+	TNode * result = NULL;
+	if (!node || !node->edges){
+		return result;
+	}
+	TEdge *prev = NULL, *first = node->edges, *edge = node->edges;
+	while (edge && (edge->node->number < number)) {
+		prev = edge;
+		edge = edge->next;
+	}
+	if (edge && (edge->node->number == number)) {
+		if (prev) {
+			prev->next = edge->next;
+		} else {
+			node->edges = edge->next;
+		}
+		result = edge->node;
+		free(edge);
+	}
+	return result;
+}
+
+TNode * find_node(TNode *node, int number) {
+	while (node && (node->number < number)) {
+		node = node->next;
+	}
+	if (node && (node->number == number)) {
+		return node;
+	}
+	return NULL;
+}
+
+TNode * remove_edge(TNode *node, int number1, int number2) {
+	TNode *found = find_node(node, number1);
+	if (!found) return node;
+	found = remove_edge_from_node(found, number2);
+	if (!found) return node;
+	remove_edge_from_node(found, number1);
+	return node;
+}
