@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include "graph.h"
 
+#define _CRT_SECURE_NO_DEPRECATE
+
 int main(void)
 {
 	TNode* graph = NULL;
@@ -33,7 +35,7 @@ int main(void)
 //	printGraph(graph);
 	graph = insertNode(graph, 7);
 	printGraph(graph);
-	scanf_s("%d");
+	scanf("%d");
 	return 0;
 }
 

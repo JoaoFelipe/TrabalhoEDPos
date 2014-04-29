@@ -1,5 +1,6 @@
 #include "graph.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 TNode * new_node(int number, TNode *next) {
 	TNode *result = (TNode *)malloc(sizeof(TNode));
@@ -72,11 +73,10 @@ TNode* insertNode(TNode* nodes,int val){
 		ant->next = newNode;
 	}
 	return nodes;
-	
 }
 
 TNode * remove_node(TNode *node, int number) {
-	if (!node){ 
+	if (!node) {
 		return node;
 	}
 	TNode *prev = NULL;
@@ -104,7 +104,7 @@ TNode * remove_node(TNode *node, int number) {
 
 TNode * remove_edge_from_node(TNode *node, int number) {
 	TNode * result = NULL;
-	if (!node || !node->edges){
+	if (!node || !node->edges) {
 		return result;
 	}
 	TEdge *prev = NULL, *first = node->edges, *edge = node->edges;
