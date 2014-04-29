@@ -12,12 +12,13 @@ typedef struct node {
 typedef struct edge {
 	struct node *node;
 	struct edge *next;
+	int cost;
 } TEdge;
 
 
 TNode * new_node(int number, TNode *next);
 
-TEdge * new_edge(TNode *node, TEdge *next);
+TEdge * new_edge(TNode *node, TEdge *next, int cost);
 
 void free_edges(TEdge *edge);
 
@@ -27,6 +28,10 @@ void free_nodes(TNode *node);
 void print_graph(TNode *graph);
 
 TNode * insert_node(TNode *nodes, int val);
+
+void insert_edge(TNode *nodes,int origin, int dest, int cost);
+
+void insert_edge_in_node(TNode *nodes, int origin, int dest, int cost);
 
 TNode * remove_node(TNode *node, int number);
 
@@ -40,6 +45,8 @@ int count_edge_sequence(TEdge *edge);
 
 void count_nodes_and_edges(TNode *node, int * nodes, int * edges);
 
-void save(TNode *node, char* name);
+void save_file(TNode *node, char* name);
+
+TNode * read_file(char* name);
 
 #endif

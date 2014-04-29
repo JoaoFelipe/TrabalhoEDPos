@@ -10,10 +10,11 @@ TNode * new_node(int number, TNode *next) {
 	return result;
 }
 
-TEdge * new_edge(TNode *node, TEdge *next) {
+TEdge * new_edge(TNode *node, TEdge *next, int cost) {
 	TEdge *result = (TEdge *)malloc(sizeof(TEdge));
 	result->node = node;
-	result->next = next;
+	result->next = next; 
+	result->cost = cost;
 	return result;
 }
 
@@ -42,7 +43,7 @@ void print_graph(TNode* graph){
 		printf("%d : ", p->number);
 		TEdge * q = p->edges;
 		while (q){
-			printf("%d ", q->node->number);
+			printf("%d(%d) ", q->node->number, q->cost);
 			q = q->next;
 		}
 		printf("\n");
@@ -71,6 +72,45 @@ TNode* insert_node(TNode *node, int number){
 	}
 	return first;
 }
+void insert_edge(TNode* graph, int origin, int dest, int cost){
+	insert_edge_in_node(graph, origin, dest, cost);
+	insert_edge_in_node(graph, dest, origin, cost);
+
+}
+void insert_edge_in_node(TNode* graph,int origin, int dest, int cost){
+	TNode * ori = find_node(graph, origin);
+	TNode * destNode = find_node(graph, dest);
+	if (!ori || !destNode){
+		return;
+	}
+	TEdge * edges = ori->edges;
+
+	if (!edges) {
+		TEdge* newEdge = new_edge(destNode, NULL,cost);
+		ori->edges = newEdge;
+		return;
+	}
+	if (destNode->number < edges->node->number){
+		TEdge* newEdge = new_edge(destNode, edges, cost);
+		ori->edges = newEdge;
+	}
+	TEdge *p = edges;
+	TEdge *ant = NULL;
+	while (p && p->node->number < destNode->number){
+		ant = p;
+		p = p->next;
+	}
+	if (!p){
+		TEdge* newEdge = new_edge(destNode, NULL, cost);
+		ant->next = newEdge;
+	}
+	else if (p->node->number != destNode->number){
+		TEdge* newEdge = new_edge(destNode, p, cost);
+		ant->next = newEdge;
+	}
+
+
+}
 
 TNode * remove_node(TNode *node, int number) {
 	if (!node) {
@@ -91,6 +131,7 @@ TNode * remove_node(TNode *node, int number) {
 		TEdge *edge = node->edges;
 		while(edge) {
 			remove_edge_from_node(edge->node, node->number);
+			edge = edge->next;
 		}
 		free_edges(node->edges);
 		free(node);
@@ -146,7 +187,7 @@ int count_edge_sequence(TEdge *edge) {
 	return 1 + count_edge_sequence(edge->next);
 }
 
-void count_nodes_and_edges(TNode *node, int * nodes, int * edges);
+void count_nodes_and_edges(TNode *node, int * nodes, int * edges) {
 	*nodes = 0;
 	*edges = 0;
 	while (node) {
@@ -154,12 +195,12 @@ void count_nodes_and_edges(TNode *node, int * nodes, int * edges);
 		*edges += count_edge_sequence(node->edges);
 		node = node->next;
 	}
-	*edges /= 2;
+	*edges = *edges / 2;
 }
 
-void save(TNode *node, char *name) {
+void save_file(TNode *node, char *name) {
 	int nodes, edges;
-	count_nodes_and_edges(node, nodes, edges);
+	count_nodes_and_edges(node, &nodes, &edges);
 	FILE *file;
 	file = fopen(name, "w");
 	fprintf(file, "%d\n", nodes);
@@ -169,7 +210,7 @@ void save(TNode *node, char *name) {
 		temp = temp->next;
 	}
 	fprintf(file, "%d\n", edges);
-	TNode *temp = node;
+	temp = node;
 	while (temp) {
 		TEdge *edge = temp->edges;
 		while (edge) {
@@ -184,4 +225,27 @@ void save(TNode *node, char *name) {
 		temp = temp->next;
 	}
 	fclose(file);
+}
+
+TNode * read_file(char* name) {
+	TNode *result = NULL;
+	FILE *file;
+	file = fopen(name, "r");
+	if (file) {
+		int nodes, edges, i;
+		fscanf(file, " %d", &nodes);
+		for (i = 0; i < nodes; i++) {
+			int number;
+			fscanf(file, " %d", &number);
+			result = insert_node(result, number);
+		}
+		fscanf(file, " %d", &edges);
+		for (i = 0; i < edges; i++) {
+			int number1, number2, cost;
+			fscanf(file, " %d %d %d", &number1, &number2, &cost);
+			insert_edge(result, number1, number2, cost);
+		}
+		fclose(file);
+	}
+	return result;
 }
