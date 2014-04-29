@@ -10,10 +10,11 @@ TNode * new_node(int number, TNode *next) {
 	return result;
 }
 
-TEdge * new_edge(TNode *node, TEdge *next) {
+TEdge * new_edge(TNode *node, TEdge *next, int cost) {
 	TEdge *result = (TEdge *)malloc(sizeof(TEdge));
 	result->node = node;
-	result->next = next;
+	result->next = next; 
+	result->cost = cost;
 	return result;
 }
 
@@ -41,7 +42,7 @@ void printGraph(TNode* graph){
 		printf("%d : ", p->number);
 		TEdge * q = p->edges;
 		while (q){
-			printf("%d ", q->node->number);
+			printf("%d(%d) ", q->node->number, q->cost);
 			q = q->next;
 		}
 		printf("\n");
@@ -74,6 +75,45 @@ TNode* insertNode(TNode* nodes,int val){
 	}
 	return nodes;
 }
+void insert_edge(TNode* graph, int origin, int dest, int cost){
+	insert_edge_in_node(graph, origin, dest, cost);
+	insert_edge_in_node(graph, dest, origin, cost);
+
+}
+void insert_edge_in_node(TNode* graph,int origin, int dest, int cost){
+	TNode * ori = find_node(graph, origin);
+	TNode * destNode = find_node(graph, dest);
+	if (!ori || !destNode){
+		return;
+	}
+	TEdge * edges = ori->edges;
+	
+	if (!edges){		
+		TEdge* newEdge = new_edge(destNode, NULL,cost);
+		ori->edges = newEdge;
+		return;
+	}
+	if (destNode->number < edges->node->number){
+		TEdge* newEdge = new_edge(destNode, edges, cost);
+		ori->edges = newEdge;
+	}
+	TEdge *p = edges;
+	TEdge *ant = NULL;
+	while (p && p->node->number < destNode->number){
+		ant = p;
+		p = p->next;
+	}
+	if (!p){
+		TEdge* newEdge = new_edge(destNode, NULL, cost);
+		ant->next = newEdge;
+	}
+	else if (p->node->number != destNode->number){
+		TEdge* newEdge = new_edge(destNode, p, cost);
+		ant->next = newEdge;
+	}
+
+
+}
 
 TNode * remove_node(TNode *node, int number) {
 	if (!node) {
@@ -95,6 +135,7 @@ TNode * remove_node(TNode *node, int number) {
 		TEdge *edge = node->edges;
 		while(edge) {
 			remove_edge_from_node(edge->node, node->number);
+			edge = edge->next;
 		}
 		free_edges(node->edges);
 		free(node);

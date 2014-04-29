@@ -12,12 +12,13 @@ typedef struct node {
 typedef struct edge {
 	struct node *node;
 	struct edge *next;
+	int cost;
 } TEdge;
 
 
 TNode * new_node(int number, TNode *next);
 
-TEdge * new_edge(TNode *node, TEdge *next);
+TEdge * new_edge(TNode *node, TEdge *next, int cost);
 
 void free_edges(TEdge *edge);
 
@@ -27,6 +28,10 @@ void free_nodes(TNode *node);
 void printGraph(TNode *graph);
 
 TNode * insertNode(TNode *nodes, int val);
+
+void insert_edge(TNode *nodes,int origin, int dest, int cost);
+
+void insert_edge_in_node(TNode *nodes, int origin, int dest, int cost);
 
 TNode * remove_node(TNode *node, int number);
 

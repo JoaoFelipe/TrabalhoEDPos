@@ -34,6 +34,16 @@ int main(void)
 	graph = insertNode(graph, 1);
 //	printGraph(graph);
 	graph = insertNode(graph, 7);
+
+	insert_edge(graph, 2, 5, 3);
+	insert_edge(graph, 2, 5, 7);
+	insert_edge(graph, 2, 7, 11);
+	insert_edge(graph, 2, 108, 0);
+
+	printGraph(graph);
+	graph = remove_node(graph,7);
+
+
 	printGraph(graph);
 	scanf("%d");
 	return 0;
