@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include "graph.h"
 
-#define _CRT_SECURE_NO_DEPRECATE
 
 int main(void)
 {
@@ -45,7 +44,7 @@ int main(void)
 
 
 	printGraph(graph);
-	scanf("%d");
+	scanf_s("%d");
 	return 0;
 }
 

@@ -41,4 +41,7 @@ TNode * find_node(TNode *node, int number);
 
 TNode * remove_edge(TNode *node, int number1, int number2);
 
+int is_connected(TNode *nodes);
+
+int count_nodes(TNode* nodes);
 #endif

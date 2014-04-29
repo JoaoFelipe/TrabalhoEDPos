@@ -183,3 +183,17 @@ TNode * remove_edge(TNode *node, int number1, int number2) {
 	remove_edge_from_node(found, number1);
 	return node;
 }
+int count_nodes(TNode* nodes){
+	int count = 0;
+	TNode *p = nodes;
+	while (!p){
+		count++;
+		p = p->next;
+	}
+	return count;
+}
+int is_connected(TNode *nodes){
+
+
+
+}
