@@ -13,7 +13,7 @@ TNode * new_node(int number, TNode *next) {
 TEdge * new_edge(TNode *node, TEdge *next, int cost) {
 	TEdge *result = (TEdge *)malloc(sizeof(TEdge));
 	result->node = node;
-	result->next = next; 
+	result->next = next;
 	result->cost = cost;
 	return result;
 }

@@ -1,4 +1,4 @@
-#include "disjoint_set.h"
+#include "kruskal.h"
 #include <stdlib.h>
 
 TSet * find_set(TSet * set) {
@@ -38,13 +38,6 @@ TSet * make_set(TNode *node) {
 	return set;
 }
 
-TSetList * new_set_list(TSet *set, TSetList *next) {
-	TSetList *result = (TSetList *) malloc(sizeof(TSetList));
-	result->set = set;
-	result->next = next;
-	return result;
-}
-
 TEdgeTuple * new_edge_tuple(void *node1, void *node2, int cost) {
 	TEdgeTuple *result = (TEdgeTuple *) malloc(sizeof(TEdgeTuple));
 	result->node1 = node1;
@@ -58,16 +51,6 @@ TEdgeTupleList * new_edge_tuple_list(TEdgeTuple *tuple, TEdgeTupleList *next) {
 	result->tuple = tuple;
 	result->next = next;
 	return result;
-}
-
-void free_set_list(TSetList *set_list) {
-	TSetList *temp;
-	while (set_list) {
-		temp = set_list->next;
-		free(set_list->set);
-		free(set_list);
-		set_list = temp;
-	}
 }
 
 void free_edge_tuple_list(TEdgeTupleList *tuple_list) {
@@ -102,29 +85,61 @@ TEdgeTupleList * insert_edge_tuple(TEdgeTupleList *list, TEdgeTuple *tuple) {
 	return first;
 }
 
-TEdgeTupleList * kruskal(TNode * graph) {
-	TEdgeTupleList *result = NULL;
-	TSetList *sets = NULL;
-	TEdgeTupleList *ordered = NULL;
+TNode * kruskal(TNode * graph) {
+	TNode *result = NULL;
+	TEdgeTupleList *sorted = NULL, *current_tuple;
+
+	int size = count_nodes(graph), i;
+	TSet **sets = (TSet **) malloc(sizeof(TSet *)*size);
+
+
+	// makesets
 	TNode *node = graph;
+	i = 0;
 	while (node) {
-		TSet *set = make_set(node);
-		sets = new_set_list(set, sets);
+		node->helper = i;
+		sets[i++] = make_set(node);
+		result = insert_node(result, node->number);
+		node = node->next;
+	}
+
+	// sorted edges by weight
+	node = graph;
+	while (node) {
 		TEdge *edge = node->edges;
 		while (edge) {
 			if (edge->node->number > node->number) {
 				TEdgeTuple *tuple = new_edge_tuple(
-					(void *) node, (void *) edge->node, edge->cost
+					(void *) sets[node->helper],
+					(void *) sets[edge->node->helper],
+					edge->cost
 				);
-				ordered = insert_edge_tuple(ordered, tuple);
+				sorted = insert_edge_tuple(sorted, tuple);
 			}
 			edge = edge->next;
 		}
-		node = node.next;
+		node = node->next;
 	}
 
-	
+	// find minimum spanning tree
+	current_tuple = sorted;
+	while (current_tuple) {
+		TSet *u = (TSet *) current_tuple->tuple->node1;
+		TSet *v = (TSet *) current_tuple->tuple->node2;
+		TSet *u_root = find_set(u), *v_root = find_set(v);
+		if (u_root != v_root) {
+			insert_edge(result, u->node->number, v->node->number, current_tuple->tuple->cost);
+			union_set(u_root, v_root);
+		}
+		current_tuple = current_tuple->next;
+	}
 
-	free_set_list(sets);
 
+	// free sets
+	for (i = 0; i < size; i++) {
+		free(sets[i]);
+	}
+	free(sets);
+	free_edge_tuple_list(sorted);
+	return result;
 }
