@@ -2,7 +2,9 @@
 //
 
 //#include "stdafx.h"
-#include<stdlib.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "graph.h"
 
 int main(void)
 {

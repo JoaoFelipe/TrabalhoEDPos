@@ -23,4 +23,12 @@ void free_edges(TEdge *edge);
 
 void free_nodes(TNode *node);
 
+TNode * remove_node(TNode *node, int number);
+
+TNode * remove_edge_from_node(TNode *node, int number);
+
+TNode * find_node(TNode *node, int number);
+
+TNode * remove_edge(TNode *node, int number1, int number2);
+
 #endif
