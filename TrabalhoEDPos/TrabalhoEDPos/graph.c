@@ -93,6 +93,7 @@ void insert_edge_in_node(TNode* graph,int origin, int dest, int cost){
 	if (destNode->number < edges->node->number){
 		TEdge* newEdge = new_edge(destNode, edges, cost);
 		ori->edges = newEdge;
+		return;
 	}
 	TEdge *p = edges;
 	TEdge *ant = NULL;
@@ -189,8 +190,35 @@ int count_nodes(TNode* nodes){
 	}
 	return count;
 }
+void reset_helper(TNode *nodes){
+	TNode* p = nodes;
+	while (p){
+		p->helper = 0;
+		p = p->next;
+	}
+}
 
 int is_connected(TNode *nodes){
+	reset_helper(nodes);
+	mark_neighbours(nodes);
+	TNode *p = nodes;
+	while (p){
+		if (p->helper == 0)
+			return 0;
+		p = p->next;
+	}
+	return 1;
+}
+void mark_neighbours(TNode *nodes){
+
+		nodes->helper = -1;
+		TEdge *e = nodes->edges;
+		while (e){
+			if (e->node->helper == 0)
+				mark_neighbours(e->node);
+			e = e->next;
+		}
+	
 }
 
 int count_edge_sequence(TEdge *edge) {

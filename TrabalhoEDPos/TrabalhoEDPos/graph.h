@@ -44,6 +44,8 @@ TNode * remove_edge(TNode *node, int number1, int number2);
 
 int is_connected(TNode *nodes);
 
+void mark_neighbours(TNode *nodes);
+
 int count_nodes(TNode* nodes);
 
 int count_edge_sequence(TEdge *edge);
