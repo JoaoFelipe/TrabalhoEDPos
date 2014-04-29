@@ -1,4 +1,5 @@
 #include "graph.h"
+#include <stdlib.h>
 
 TNode * new_node(int number, TNode *next) {
 	TNode *result = (TNode *) malloc(sizeof(TNode));
