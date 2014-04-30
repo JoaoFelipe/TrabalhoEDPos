@@ -27,14 +27,13 @@ void free_edges(TEdge *edge);
 
 void free_nodes(TNode *node);
 
-
 void print_graph(TNode *graph);
 
 TNode * insert_node(TNode *nodes, int val);
 
-void insert_edge(TNode *nodes,int origin, int dest, int cost);
+void insert_edge(TNode *graph, int origin, int dest, int cost);
 
-void insert_edge_in_node(TNode *nodes, int origin, int dest, int cost);
+void insert_edge_in_node(TNode *origin, TNode *dest, int cost);
 
 TNode * remove_node(TNode *node, int number);
 
