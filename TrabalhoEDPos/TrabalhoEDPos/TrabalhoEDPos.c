@@ -27,11 +27,8 @@ int main(void)
 	TNode* k = kruskal(graph);
 	print_graph(k);
 
-	printf("-1\n");
 	free_nodes(graph);
-	printf("-2\n");
 	free_nodes(k);
-	printf("-3\n");
 
 	int a;
 	scanf(" %d", &a);

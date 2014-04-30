@@ -74,49 +74,35 @@ TNode* insert_node(TNode *node, int number){
 }
 
 void insert_edge(TNode *graph, int origin, int dest, int cost){
-	printf("3.1.1\n");
 	TNode * origin_node = find_node(graph, origin);
-	printf("3.1.2\n");
 	TNode * dest_node = find_node(graph, dest);
-	printf("3.1.3\n");
 	if (!origin_node || !dest_node){
 		return;
 	}
-	printf("3.1.4\n");
 	insert_edge_in_node(origin_node, dest_node, cost);
-	printf("3.1.5\n");
 	insert_edge_in_node(dest_node, origin_node, cost);
-	printf("3.1.6\n");
 
 }
 
 void insert_edge_in_node(TNode *origin, TNode *dest, int cost) {
-	printf("3.1.4.1\n");
 	TEdge* new = new_edge(dest, NULL, cost);
-	printf("3.1.4.2\n");
 	if (!origin->edges) {
 		origin->edges = new;
 		return;
 	}
-	printf("3.1.4.3\n");
 	TEdge *prev = NULL, *edge = origin->edges;
-	printf("3.1.4.4\n");
 	while (edge && (edge->node->number < dest->number)) {
 		prev = edge;
 		edge = edge->next;
 	}
-	printf("3.1.4.5\n");
 	new->next = edge;
-	printf("3.1.4.6\n");
 	if ((edge && (edge->node->number != dest->number)) || !edge) {
-		printf("3.1.4.7\n");
 		if (!prev ) {
 			origin->edges = new;
 		} else  {
 			prev->next = new;
 		}
 	}
-	printf("3.1.4.8\n");
 }
 
 TNode * remove_node(TNode *node, int number) {
@@ -187,15 +173,6 @@ TNode * remove_edge(TNode *node, int number1, int number2) {
 	return node;
 }
 
-int count_nodes(TNode* nodes){
-	int count = 0;
-	TNode *p = nodes;
-	while (!p){
-		count++;
-		p = p->next;
-	}
-	return count;
-}
 void reset_helper(TNode *nodes){
 	TNode* p = nodes;
 	while (p){
@@ -215,6 +192,7 @@ int is_connected(TNode *nodes){
 	}
 	return 1;
 }
+
 void mark_neighbours(TNode *nodes){
 
 		nodes->helper = -1;
@@ -225,6 +203,13 @@ void mark_neighbours(TNode *nodes){
 			e = e->next;
 		}
 	
+}
+
+int count_nodes(TNode *node) {
+	if (!node) {
+		return 0;
+	}
+	return 1 + count_nodes(node->next);
 }
 
 int count_edge_sequence(TEdge *edge) {

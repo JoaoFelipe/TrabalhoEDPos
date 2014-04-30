@@ -79,25 +79,21 @@ TEdgeTuple * insert_edge_tuple(TEdgeTuple *edge, TSet *n1, TSet *n2, int cost) {
 
 
 TNode * kruskal(TNode * graph) {
-	printf("-\n");
 	TNode *result = NULL;
 	TEdgeTuple *sorted = NULL, *current_tuple;
-	printf("0\n");
 	int size = count_nodes(graph), i;
-	printf("0-1\n");
 	TSet **sets = (TSet **) malloc(sizeof(TSet *)*size);
 
 	// makesets
-	printf("1\n");
 	TNode *node = graph;
 	i = 0;
 	while (node) {
 		node->helper = i;
-		sets[i++] = make_set(node);
+		sets[i] = make_set(node);
 		result = insert_node(result, node->number);
 		node = node->next;
+		i++;
 	}
-	printf("2\n");
 
 	// sorted edges by weight
 	node = graph;
@@ -113,7 +109,6 @@ TNode * kruskal(TNode * graph) {
 		}
 		node = node->next;
 	}
-	printf("3\n");
 
 	// find minimum spanning tree
 	current_tuple = sorted;
@@ -122,14 +117,11 @@ TNode * kruskal(TNode * graph) {
 		TSet *v = current_tuple->node2;
 		TSet *u_root = find_set(u), *v_root = find_set(v);
 		if (u_root != v_root) {
-			printf("3.1\n");
 			insert_edge(result, u->node->number, v->node->number, current_tuple->cost);
-			printf("3.2\n");
 			union_set(u_root, v_root);
 		}
 		current_tuple = current_tuple->next;
 	}
-	printf("4\n");
 
 	// free sets
 	for (i = 0; i < size; i++) {
@@ -137,7 +129,6 @@ TNode * kruskal(TNode * graph) {
 	}
 	free(sets);
 	free_edge_tuple_list(sorted);
-	printf("5\n");
 
 	return result;
 }
