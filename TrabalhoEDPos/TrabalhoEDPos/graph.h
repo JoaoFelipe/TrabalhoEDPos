@@ -8,6 +8,7 @@ typedef struct node {
 	struct node *next;
 	struct edge *edges;
 	int helper;
+	struct node *father;
 } TNode;
 
 typedef struct edge {
@@ -15,6 +16,7 @@ typedef struct edge {
 	struct edge *next;
 	int cost;
 } TEdge;
+
 
 
 TNode * new_node(int number, TNode *next);
@@ -54,7 +56,7 @@ void count_nodes_and_edges(TNode *node, int * nodes, int * edges);
 
 void save_file(TNode *node, char* name);
 
-int dijkstra(TNode* nodes, int start, int end);
+int* dijkstra(TNode* nodes, int start, int end);
 
 TNode * read_file(char* name);
 

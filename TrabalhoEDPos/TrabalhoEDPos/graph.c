@@ -1,6 +1,7 @@
 #include "graph.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 
 TNode * new_node(int number, TNode *next) {
 	TNode *result = (TNode *)malloc(sizeof(TNode));
@@ -194,7 +195,9 @@ void reset_helper(TNode *nodes, int val){
 	TNode* p = nodes;
 	while (p){
 		p->helper = val;
+		p->father = NULL;
 		p = p->next;
+		
 	}
 }
 
@@ -209,50 +212,52 @@ int is_connected(TNode *nodes){
 	}
 	return 1;
 }
-int dijkstra(TNode* nodes, int start, int end){
-	reset_helper(nodes, -1);
-	TNode *newGraph = NULL;
+TNode* find_least_cost(TNode* nodes){
+	TNode*p = nodes->next;
+	TNode*ret = nodes;
+	while (p){
+		if (p->helper != -1){
+			if (p->helper < ret->helper || ret->helper == -1)
+				ret = p;
+		}
+		
+		p = p->next;
+	}
+	return ret;
+}
+int* dijkstra(TNode* nodes, int start, int end){
+	reset_helper(nodes, INT_MAX);
 	TNode *p = find_node(nodes, start);
 	p->helper = 0;
-	newGraph = insert_node(newGraph, p->number);
-	while (p && p->number != end){
+	int size = 0;
+	
+	while (p->helper != -1){
+		if (p->number == end)
+			break;
 		TEdge* e = p->edges;
-		int not_chosen = 1;
-		TNode *least_cost = NULL;
-		int least_cost_value;
 		while (e){
-			if (e->node->helper != -2){
-				if (not_chosen == 1){
-					least_cost = e->node;
-					least_cost_value = e->cost;
-					not_chosen = 0;
-				}					
+			if (e->node->helper != -1){				
 				int val = p->helper + e->cost;								
-				if (val <= e->node->helper || e->node->helper == -1)
+				if (val < e->node->helper){
 					e->node->helper = val;
-				if (e->node->helper <= least_cost->helper){
-					least_cost = e->node;
-					least_cost_value = e->cost;
+					e->node->father = p;
 				}
-					
-				
+												
 			}	
 			e = e->next;
 		}
-		if (least_cost){
-			newGraph = insert_node(newGraph, least_cost->number);
-			insert_edge(newGraph, p->number, least_cost->number,least_cost_value);
-		}
-			
-		//printf("%d", least_cost->number);
-		p->helper = -2;
-		p = least_cost;
+		size++;
+		p->helper = -1;
+		p = find_least_cost(nodes);
 	}
-	save_file(newGraph, "cmc.txt");
-	//print_graph(newGraph);
-	free_nodes(newGraph);
-	
-	
+	int * ret = (int*)malloc(sizeof(int)*size);
+	int i = size-1;
+	while (p){
+		ret[i] = p->number;
+		i--;
+		p = p->father;
+	}
+	return ret;
 	
 }
 void mark_neighbours(TNode *nodes){
