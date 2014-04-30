@@ -14,14 +14,14 @@ int main(void)
 	//graph = remove_node(graph,7);
 	//insert_edge(graph, 1, 3, 10);
 	//insert_edge(graph, 3, 2, 10);
-	dijkstra(graph, 5, 1);
+	dijkstra(graph, 6, 3);
 	//graph = remove_node(graph, 1);
 	//graph = remove_node(graph, 7);
 	//graph = remove_node(graph, 5);
 	save_file(graph, "temp2.txt");
 	//print_graph(graph);
-	int conexo = is_connected(graph);
-	printf("%d", conexo);
+//	int conexo = is_connected(graph);
+//	printf("%d", conexo);
 	scanf("%d");
 	return 0;
 }
