@@ -29,9 +29,9 @@ void print_graph(TNode *graph);
 
 TNode * insert_node(TNode *nodes, int val);
 
-void insert_edge(TNode *nodes,int origin, int dest, int cost);
+void insert_edge(TNode *graph, int origin, int dest, int cost);
 
-void insert_edge_in_node(TNode *nodes, int origin, int dest, int cost);
+void insert_edge_in_node(TNode *origin, TNode *dest, int cost);
 
 TNode * remove_node(TNode *node, int number);
 
@@ -42,6 +42,8 @@ TNode * find_node(TNode *node, int number);
 TNode * remove_edge(TNode *node, int number1, int number2);
 
 int is_connected(TNode *nodes);
+
+void mark_neighbours(TNode *nodes);
 
 int count_nodes(TNode* nodes);
 

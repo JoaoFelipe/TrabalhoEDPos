@@ -10,15 +10,11 @@ typedef struct set {
 } TSet;
 
 typedef struct edge_tuple {
-	void *node1;
-	void *node2;
+	TSet *node1;
+	TSet *node2;
 	int cost;
+	struct edge_tuple *next;
 } TEdgeTuple;
-
-typedef struct edge_tuple_list {
-	struct edge_tuple *tuple;
-	struct edge_tuple_list *next;
-} TEdgeTupleList;
 
 TSet * find_set(TSet *set);
 
@@ -26,13 +22,11 @@ void union_set(TSet *x, TSet *y);
 
 TSet * make_set(TNode *value);
 
-TEdgeTuple * new_edge_tuple(void *node1, void *node2, int cost);
+TEdgeTuple * new_edge_tuple(TSet *n1, TSet *n2, int cost, TEdgeTuple *next);
 
-TEdgeTupleList * new_edge_tuple_list(TEdgeTuple *tuple, TEdgeTupleList *next);
+void free_edge_tuple_list(TEdgeTuple *tuple_list);
 
-void free_edge_tuple_list(TEdgeTupleList *tuple_list);
-
-TEdgeTupleList * insert_edge_tuple(TEdgeTupleList *list, TEdgeTuple *tuple);
+TEdgeTuple * insert_edge_tuple(TEdgeTuple *list, TSet *n1, TSet *n2, int cost);
 
 TNode * kruskal(TNode * graph);
 

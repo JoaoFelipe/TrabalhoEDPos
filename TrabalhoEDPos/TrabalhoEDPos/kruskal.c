@@ -1,5 +1,6 @@
 #include "kruskal.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 TSet * find_set(TSet * set) {
 	TSet *temp = NULL, *root = set;
@@ -38,44 +39,35 @@ TSet * make_set(TNode *node) {
 	return set;
 }
 
-TEdgeTuple * new_edge_tuple(void *node1, void *node2, int cost) {
-	TEdgeTuple *result = (TEdgeTuple *) malloc(sizeof(TEdgeTuple));
-	result->node1 = node1;
-	result->node2 = node2;
-	result->cost = cost;
-	return result;
-}
 
-TEdgeTupleList * new_edge_tuple_list(TEdgeTuple *tuple, TEdgeTupleList *next) {
-	TEdgeTupleList *result = (TEdgeTupleList *) malloc(sizeof(TEdgeTupleList));
-	result->tuple = tuple;
+TEdgeTuple * new_edge_tuple(TSet *n1, TSet *n2, int cost, TEdgeTuple *next) {
+	TEdgeTuple *result = (TEdgeTuple *) malloc(sizeof(TEdgeTuple));
+	result->node1 = n1;
+	result->node2 = n2;
+	result->cost = cost;
 	result->next = next;
 	return result;
 }
 
-void free_edge_tuple_list(TEdgeTupleList *tuple_list) {
-	TEdgeTupleList *temp;
-	while (tuple_list) {
-		temp = tuple_list->next;
-		free(tuple_list);
-		tuple_list = temp;
+void free_edge_tuple_list(TEdgeTuple *edge_tuple) {
+	if (edge_tuple) {
+		free_edge_tuple_list(edge_tuple->next);
+		free(edge_tuple);
 	}
 }
 
-TEdgeTupleList * insert_edge_tuple(TEdgeTupleList *list, TEdgeTuple *tuple) {
-	TEdgeTupleList* new = new_edge_tuple_list(tuple, NULL);
-	if (!list) {
+TEdgeTuple * insert_edge_tuple(TEdgeTuple *edge, TSet *n1, TSet *n2, int cost) {
+	TEdgeTuple *new = new_edge_tuple(n1, n2, cost, NULL);
+	if (!edge) {
 		return new;
 	}
-	TEdgeTupleList *prev = NULL, *first = list;
-	while (list && (list->tuple->cost < tuple->cost)) {
-		prev = list;
-		list = list->next;
+	TEdgeTuple *prev = NULL, *first = edge;
+	while (edge && (edge->cost < cost)) {
+		prev = edge;
+		edge = edge->next;
 	}
-	new->next = list;
-	if (!list || (list &&
-			!((list->tuple->node1 == tuple->node1) &&
-			 (list->tuple->node2 == tuple->node2)))) {
+	new->next = edge;
+	if (!edge || (edge && !((edge->node1 == n1) && (edge->node2 == n2)))) {
 		if (!prev) {
 			first = new;
 		} else  {
@@ -85,15 +77,18 @@ TEdgeTupleList * insert_edge_tuple(TEdgeTupleList *list, TEdgeTuple *tuple) {
 	return first;
 }
 
-TNode * kruskal(TNode * graph) {
-	TNode *result = NULL;
-	TEdgeTupleList *sorted = NULL, *current_tuple;
 
+TNode * kruskal(TNode * graph) {
+	printf("-\n");
+	TNode *result = NULL;
+	TEdgeTuple *sorted = NULL, *current_tuple;
+	printf("0\n");
 	int size = count_nodes(graph), i;
+	printf("0-1\n");
 	TSet **sets = (TSet **) malloc(sizeof(TSet *)*size);
 
-
 	// makesets
+	printf("1\n");
 	TNode *node = graph;
 	i = 0;
 	while (node) {
@@ -102,6 +97,7 @@ TNode * kruskal(TNode * graph) {
 		result = insert_node(result, node->number);
 		node = node->next;
 	}
+	printf("2\n");
 
 	// sorted edges by weight
 	node = graph;
@@ -109,31 +105,31 @@ TNode * kruskal(TNode * graph) {
 		TEdge *edge = node->edges;
 		while (edge) {
 			if (edge->node->number > node->number) {
-				TEdgeTuple *tuple = new_edge_tuple(
-					(void *) sets[node->helper],
-					(void *) sets[edge->node->helper],
-					edge->cost
-				);
-				sorted = insert_edge_tuple(sorted, tuple);
+				TSet *u = sets[node->helper];
+				TSet *v = sets[edge->node->helper];
+				sorted = insert_edge_tuple(sorted, u, v, edge->cost);
 			}
 			edge = edge->next;
 		}
 		node = node->next;
 	}
+	printf("3\n");
 
 	// find minimum spanning tree
 	current_tuple = sorted;
 	while (current_tuple) {
-		TSet *u = (TSet *) current_tuple->tuple->node1;
-		TSet *v = (TSet *) current_tuple->tuple->node2;
+		TSet *u = current_tuple->node1;
+		TSet *v = current_tuple->node2;
 		TSet *u_root = find_set(u), *v_root = find_set(v);
 		if (u_root != v_root) {
-			insert_edge(result, u->node->number, v->node->number, current_tuple->tuple->cost);
+			printf("3.1\n");
+			insert_edge(result, u->node->number, v->node->number, current_tuple->cost);
+			printf("3.2\n");
 			union_set(u_root, v_root);
 		}
 		current_tuple = current_tuple->next;
 	}
-
+	printf("4\n");
 
 	// free sets
 	for (i = 0; i < size; i++) {
@@ -141,5 +137,7 @@ TNode * kruskal(TNode * graph) {
 	}
 	free(sets);
 	free_edge_tuple_list(sorted);
+	printf("5\n");
+
 	return result;
 }
