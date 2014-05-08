@@ -18,7 +18,6 @@ typedef struct edge {
 } TEdge;
 
 
-
 TNode * new_node(int number, TNode *next);
 
 TEdge * new_edge(TNode *node, TEdge *next, int cost);
@@ -41,7 +40,7 @@ TNode * remove_edge_from_node(TNode *node, int number);
 
 TNode * find_node(TNode *node, int number);
 
-TNode * remove_edge(TNode *node, int number1, int number2);
+void remove_edge(TNode *node, int number1, int number2);
 
 int is_connected(TNode *nodes);
 
@@ -54,8 +53,6 @@ int count_edge_sequence(TEdge *edge);
 void count_nodes_and_edges(TNode *node, int * nodes, int * edges);
 
 void save_file(TNode *node, char* name);
-
-int* dijkstra(TNode* nodes, int start, int end);
 
 TNode * read_file(char* name);
 

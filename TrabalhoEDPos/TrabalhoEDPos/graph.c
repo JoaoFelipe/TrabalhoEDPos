@@ -1,7 +1,6 @@
 #include "graph.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <limits.h>
 
 TNode * new_node(int number, TNode *next) {
 	TNode *result = (TNode *)malloc(sizeof(TNode));
@@ -165,13 +164,12 @@ TNode * find_node(TNode *node, int number) {
 	return NULL;
 }
 
-TNode * remove_edge(TNode *node, int number1, int number2) {
+void remove_edge(TNode *node, int number1, int number2) {
 	TNode *found = find_node(node, number1);
-	if (!found) return node;
+	if (!found) return;
 	found = remove_edge_from_node(found, number2);
-	if (!found) return node;
+	if (!found) return;
 	remove_edge_from_node(found, number1);
-	return node;
 }
 
 void reset_helper(TNode *nodes, int val){
@@ -196,74 +194,15 @@ int is_connected(TNode *nodes){
 	return 1;
 }
 
-TNode* find_least_cost(TNode* nodes){
-	TNode*p = nodes->next;
-	TNode*ret = nodes;
-	while (p){
-		if (p->helper != -1){
-			if (p->helper < ret->helper || ret->helper == -1)
-				ret = p;
-		}
-		
-		p = p->next;
-	}
-	return ret;
-}
-int* dijkstra(TNode* nodes, int start, int end){
-	reset_helper(nodes, INT_MAX);
-	TNode *p = find_node(nodes, start);
-	p->helper = 0;
-	
-	
-	while (p->helper != -1){
-		if (p->number == end)
-			break;
-		TEdge* e = p->edges;
-		while (e){
-			if (e->node->helper != -1){				
-				int val = p->helper + e->cost;								
-				if (val < e->node->helper){
-					e->node->helper = val;
-					e->node->father = p;
-				}
-												
-			}	
-			e = e->next;
-		}
-		p->helper = -1;
-		p = find_least_cost(nodes);
-	}
-
-	int size = 0;
-	TNode *aux = p;
-	while (aux){
-		aux = aux->father;
-		size++;
-	}
-	int * ret = (int*)malloc(sizeof(int)*size);
-	int i = size - 1;
-	while (p){
-		ret[i--] = p->number;
-		p = p->father;
-		
-	}
-	for (i = 0; i < size; i++){
-		printf("%d ", ret[i]);
-	}
-	return ret;
-	
-}
 
 void mark_neighbours(TNode *nodes){
-
-		nodes->helper = -1;
-		TEdge *e = nodes->edges;
-		while (e){
-			if (e->node->helper == 0)
-				mark_neighbours(e->node);
-			e = e->next;
-		}
-	
+	nodes->helper = -1;
+	TEdge *e = nodes->edges;
+	while (e){
+		if (e->node->helper == 0)
+			mark_neighbours(e->node);
+		e = e->next;
+	}
 }
 
 int count_nodes(TNode *node) {
