@@ -176,7 +176,6 @@ void reset_helper(TNode *nodes, int val){
 	TNode* p = nodes;
 	while (p){
 		p->helper = val;
-		p->father = NULL;
 		p = p->next;
 		
 	}

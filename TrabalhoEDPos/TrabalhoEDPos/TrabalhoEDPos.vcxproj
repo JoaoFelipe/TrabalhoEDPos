@@ -80,11 +80,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="dijkstra.h" />
     <ClInclude Include="graph.h" />
+    <ClInclude Include="kruskal.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="dijkstra.c" />
     <ClCompile Include="graph.c" />
+    <ClCompile Include="kruskal.c" />
     <ClCompile Include="TrabalhoEDPos.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

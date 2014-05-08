@@ -24,12 +24,24 @@
     <ClInclude Include="graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="dijkstra.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kruskal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TrabalhoEDPos.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="graph.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dijkstra.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kruskal.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

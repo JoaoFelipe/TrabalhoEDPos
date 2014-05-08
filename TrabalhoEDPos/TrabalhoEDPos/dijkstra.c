@@ -4,12 +4,29 @@
 #include <limits.h>
 #include "graph.h"
 
-TNode* find_least_cost(TNode* nodes){
+int prepare_helpers(TNode *graph){
+	TNode *p = graph;
+	int i = 0;
+	while (p){
+		
+		p->helper = i++;
+		p = p->next;
+	}
+	return i;
+}
+void prepare_array(int* val, int size, int num){
+	int i;
+	for (i = 0; i < size; i++){
+		val[i] = num;
+	}
+}
+
+TNode* find_least_cost(TNode* nodes, int* dijValues){
 	TNode*p = nodes->next;
 	TNode*ret = nodes;
 	while (p){
-		if (p->helper != -1){
-			if (p->helper < ret->helper || ret->helper == -1)
+		if (dijValues[p->helper] != -1){
+			if (dijValues[p->helper] < dijValues[ret->helper] || dijValues[ret->helper] == -1)
 				ret = p;
 		}
 		
@@ -19,46 +36,74 @@ TNode* find_least_cost(TNode* nodes){
 }
 
 int* dijkstra(TNode* nodes, int start, int end){
-	reset_helper(nodes, INT_MAX);
+	//reset_helper(nodes, INT_MAX);
+	int size = prepare_helpers(nodes);
+	int* dijValues = (int*)malloc(sizeof(int)*size);
+	int* fatherValues = (int*)malloc(sizeof(int)*size);
+	int* edgeValues = (int*)malloc(sizeof(int)*size);
+	prepare_array(dijValues, size, INT_MAX);
+	prepare_array(fatherValues, size, -1);
+	prepare_array(edgeValues, size, -1);
 	TNode *p = find_node(nodes, start);
-	p->helper = 0;
-	
-	
-	while (p->helper != -1){
-		if (p->number == end)
-			break;
+	dijValues[p->helper] = 0;
+	fatherValues[p->helper] = p->number;
+		
+	while (dijValues[p->helper] != -1){
+//		if (p->number == end)
+//			break;
 		TEdge* e = p->edges;
 		while (e){
-			if (e->node->helper != -1){				
-				int val = p->helper + e->cost;								
-				if (val < e->node->helper){
-					e->node->helper = val;
-					e->node->father = p;
+			if (dijValues[e->node->helper] != -1){				
+				int val = dijValues[p->helper] + e->cost;								
+				if (val < dijValues[e->node->helper]){
+					dijValues[e->node->helper] = val;
+					fatherValues[e->node->helper] = p->number;
+					edgeValues[e->node->helper] = e->cost;
 				}
 												
 			}	
 			e = e->next;
 		}
-		p->helper = -1;
-		p = find_least_cost(nodes);
+		dijValues[p->helper] = -1;
+		p = find_least_cost(nodes,dijValues);
 	}
-
-	int size = 0;
-	TNode *aux = p;
-	while (aux){
-		aux = aux->father;
-		size++;
-	}
-	int * ret = (int*)malloc(sizeof(int)*size);
-	int i = size - 1;
+	
+	TNode * ret = NULL ;
+	p = nodes;
 	while (p){
-		ret[i--] = p->number;
-		p = p->father;
-		
+		ret = insert_node(ret, p->number);
+		p = p->next;
 	}
-	for (i = 0; i < size; i++){
-		printf("%d ", ret[i]);
+	p = nodes;
+	int i = 0;
+	while (p){
+		if (p->number != fatherValues[i])
+			insert_edge(ret, p->number, fatherValues[i], edgeValues[i]);
+		i++;
+		p = p->next;
 	}
-	return ret;
+	save_file(ret, "cmc.txt");
+	free(ret);
+	free(dijValues);
+	free(fatherValues);
+	return 0;
+
+	//int retSize = 0;
+	//TNode *aux = p;
+	//while (aux){
+	//	aux = find_node(nodes,fatherValues[aux->helper]);
+	//	retSize++;
+	//}
+	//int * ret = (int*)malloc(sizeof(int)*size);
+	//int i = retSize - 1;
+	//while (p){
+	//	ret[i--] = p->number;
+	//	p = find_node(nodes,fatherValues[p->helper]);
+	//	
+	//}
+	//for (i = 0; i < retSize; i++){
+	//	printf("%d ", ret[i]);
+	//}
+	//return ret;
 	
 }

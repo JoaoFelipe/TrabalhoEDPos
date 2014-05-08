@@ -8,7 +8,6 @@ typedef struct node {
 	struct node *next;
 	struct edge *edges;
 	int helper;
-	struct node *father;
 } TNode;
 
 typedef struct edge {

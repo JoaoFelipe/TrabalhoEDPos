@@ -72,7 +72,7 @@ int interface(TNode *graph) {
 				printf("Caminho Minimo. Digite o identificador do no: \n>> ");
 				scanf(" %d", &v1);
 				if (is_connected(graph)) {
-					dijkstra(graph, v1, -1);
+					dijkstra(graph, v1, 6);
 				} else {
 					printf("Grafo desconexo\n");
 				}
