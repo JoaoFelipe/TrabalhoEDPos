@@ -22,3 +22,11 @@
 *.x86_64
 *.hex
 *.opensdf
+TrabalhoEDPos/Debug/TrabalhoEDPos.ilk
+*.ilk
+TrabalhoEDPos/Debug/TrabalhoEDPos.pdb
+TrabalhoEDPos/TrabalhoEDPos.v12.suo
+*.pdb
+*.idb
+*.log
+*.suo

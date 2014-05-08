@@ -73,6 +73,7 @@ int interface(TNode *graph) {
 				scanf(" %d", &v1);
 				if (is_connected(graph)) {
 					dijkstra(graph, v1, 6);
+					printf("Resultado salvo em cmc.txt\n");
 				} else {
 					printf("Grafo desconexo\n");
 				}
