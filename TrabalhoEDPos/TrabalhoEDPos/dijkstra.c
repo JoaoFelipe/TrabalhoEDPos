@@ -85,9 +85,10 @@ int* dijkstra(TNode* nodes, int start){
 			p = p->next;
 		}
 		save_file(ret, "cmc.txt");
-		free(ret);
+		free_nodes(ret);
 		free(dijValues);
 		free(fatherValues);
+		free(edgeValues);
 		return 1;
 	}
 	return 0;
