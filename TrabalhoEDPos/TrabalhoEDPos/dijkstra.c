@@ -35,7 +35,7 @@ TNode* find_least_cost(TNode* nodes, int* dijValues){
 	return ret;
 }
 
-int* dijkstra(TNode* nodes, int start){
+int dijkstra(TNode* nodes, int start){
 	//reset_helper(nodes, INT_MAX);
 	TNode *p = find_node(nodes, start);
 	if (p){

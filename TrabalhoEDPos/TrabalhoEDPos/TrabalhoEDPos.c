@@ -63,6 +63,7 @@ int interface(TNode *graph) {
 				if (is_connected(graph)) {
 					TNode *k = kruskal(graph);
 					save_file(k, "avm.txt");
+					printf("Resultado salvo em avm.txt\n");
 					free_nodes(k);
 				} else {
 					printf("Grafo desconexo\n");
@@ -72,7 +73,7 @@ int interface(TNode *graph) {
 				if (is_connected(graph)) {
 					printf("Caminho Minimo. Digite o identificador do no: \n>> ");
 					scanf(" %d", &v1);
-					int ret = dijkstra(graph, v1, 6);
+					int ret = dijkstra(graph, v1);
 					if (ret)
 						printf("Resultado salvo em cmc.txt\n");
 					else

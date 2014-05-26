@@ -5,10 +5,10 @@ CC = gcc
 CFLAGS=-I$(IDIR)
 
 
-_DEPS = graph.h kruskal.h
+_DEPS = graph.h kruskal.h dijkstra.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = graph.o kruskal.o TrabalhoEDPos.o
+_OBJ = graph.o kruskal.o dijkstra.o TrabalhoEDPos.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: $(ODIR)/%.c $(DEPS)
