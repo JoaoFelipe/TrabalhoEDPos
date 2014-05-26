@@ -68,12 +68,15 @@ int interface(TNode *graph) {
 					printf("Grafo desconexo\n");
 				}
 				break;
-			case 7:
-				printf("Caminho Minimo. Digite o identificador do no: \n>> ");
-				scanf(" %d", &v1);
+			case 7:				
 				if (is_connected(graph)) {
-					dijkstra(graph, v1, 6);
-					printf("Resultado salvo em cmc.txt\n");
+					printf("Caminho Minimo. Digite o identificador do no: \n>> ");
+					scanf(" %d", &v1);
+					int ret = dijkstra(graph, v1, 6);
+					if (ret)
+						printf("Resultado salvo em cmc.txt\n");
+					else
+						printf("No nao existe!\n");
 				} else {
 					printf("Grafo desconexo\n");
 				}
@@ -93,7 +96,7 @@ int main(int argc, char **argv)
 {
 	TNode* graph;
 	if (argc == 1) {
-		graph = read_file("temp.txt");
+		graph = read_file(".txt");
 	} else {
 		graph = read_file(argv[1]);
 	}

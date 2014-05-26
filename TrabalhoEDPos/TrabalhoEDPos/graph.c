@@ -182,25 +182,30 @@ void reset_helper(TNode *nodes, int val){
 }
 
 int is_connected(TNode *nodes){
-	reset_helper(nodes,0);
-	mark_neighbours(nodes);
-	TNode *p = nodes;
-	while (p){
-		if (p->helper == 0)
-			return 0;
-		p = p->next;
-	}
-	return 1;
+	if (nodes){	
+		reset_helper(nodes,0);
+		mark_neighbours(nodes);
+		TNode *p = nodes;
+		while (p){
+			if (p->helper == 0)
+				return 0;
+			p = p->next;
+		}
+		return 1;
+		}
+	return 0;
 }
 
 
 void mark_neighbours(TNode *nodes){
-	nodes->helper = -1;
-	TEdge *e = nodes->edges;
-	while (e){
-		if (e->node->helper == 0)
-			mark_neighbours(e->node);
-		e = e->next;
+	if (nodes){
+		nodes->helper = -1;
+		TEdge *e = nodes->edges;
+		while (e){
+			if (e->node->helper == 0)
+				mark_neighbours(e->node);
+			e = e->next;
+		}
 	}
 }
 
